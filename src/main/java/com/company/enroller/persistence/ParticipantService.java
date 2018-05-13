@@ -30,13 +30,15 @@ public class ParticipantService {
 		transaction.commit();
 	}
 	
-	public void update(Participant participant){
-		Transaction transaction = connector.getSession().beginTransaction();
+	public void update(Participant oldparticipant, Participant participantUpdate){
+		delete (oldparticipant);
+		create (participantUpdate);
+		/*		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().update(participant);
 		transaction.commit();
-	}
+*/	}
 	
-	public void delete(Participant participant){
+	public void delete(Participant participant){//delete
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().delete(participant);
 		transaction.commit();

@@ -47,13 +47,13 @@ public class ParticipantRestController {
 		}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)//aktualizacja użytkownika
-	public ResponseEntity<?> updateParticipantById(@PathVariable("id") String login) {
-	     Participant participant = participantService.findByLogin(login);
-	     if (participant == null) {
+	public ResponseEntity<?> updateParticipantById(@PathVariable("id") String login, @RequestBody Participant participantUpdate) {
+	     Participant oldparticipant = participantService.findByLogin(login);
+	     if (oldparticipant == null) {
 	         return new ResponseEntity(HttpStatus.NOT_FOUND);
 	     }
-	     participantService.update(participant);
-	     return new ResponseEntity<Participant>(participant, HttpStatus.OK);
+	     participantService.update(oldparticipant, participantUpdate);
+	     return new ResponseEntity<Participant>(participantUpdate, HttpStatus.OK);
 	 }
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)//usuwanie użytkownika
