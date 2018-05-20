@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,7 +68,7 @@ public class ParticipantRestControllerTest {
 	}
 	
 	@Test //usuwanie uzytkownika
-	public void deleteParticipantsByLogin() throws Exception {
+	public void deleteParticipant() throws Exception {
 		Participant participant = new Participant();
 		participant.setLogin("testlogin");
 		participant.setPassword("testpassword");
@@ -77,6 +78,20 @@ public class ParticipantRestControllerTest {
 		mvc.perform(delete("/participants/testlogin").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 			.andExpect(content().string("{\"login\":\"testlogin\",\"password\":\"testpassword\"}"));//recznie skopiowane z JUnit
 			//.andExpect(content().string(new ObjectMapper().writeValueAsString(participant))); //automatycznie z JSON
-			
 	}
+
+	@Test //dodawanie uzytkownika
+	public void addParticipant() throws Exception {
+		Participant participant = new Participant();
+		participant.setLogin("testlogin");
+		participant.setPassword("testpassword");
+		String inputJSON = new ObjectMapper().writeValueAsString(participant);
+		
+		given(participantService.findByLogin("testlogin")).willReturn((Participant) null);
+		
+		mvc.perform(post("/participants").content(inputJSON).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated())
+			.andExpect(jsonPath("login", is("testlogin")));//recznie JSON
+			//.andExpect(content().string(new ObjectMapper().writeValueAsString(participant))); //automatycznie z JSON
+	}
+
 }
