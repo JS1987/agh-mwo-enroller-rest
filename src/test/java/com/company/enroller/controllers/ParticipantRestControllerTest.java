@@ -52,7 +52,7 @@ public class ParticipantRestControllerTest {
 				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].login", is(participant.getLogin())));
 	}
 
-	@Test //test na wyszukiwanie użytkownka
+	@Test //test wyszukiwanie użytkownka
 	public void getParticipantsByLogin() throws Exception {
 		Participant participant = new Participant();
 		participant.setLogin("testlogin");
